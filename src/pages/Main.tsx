@@ -35,11 +35,10 @@ const resolveApiBase = () => {
   if (import.meta.env.DEV) {
     return "";
   }
-  return import.meta.env.VITE_API_URL || "";
+  return import.meta.env.VITE_API_URL || import.meta.env.API_URL || "";
 };
 
 const API_BASE = resolveApiBase();
-const REQUIRE_API = !import.meta.env.DEV && !import.meta.env.VITE_API_URL;
 
 const formatTimestamp = () =>
   new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
@@ -112,21 +111,6 @@ export default function Main() {
     setMessages((prev) => [...prev, userMessage, loadingMessage]);
     setUserInput("");
     setIsSending(true);
-    if (REQUIRE_API) {
-      const message: ChatMessage = {
-        id: `error-${Date.now()}`,
-        role: "error",
-        title: "Configuration Error",
-        text: "Thiếu biến VITE_API_URL trong môi trường production.",
-        timestamp: "Just now"
-      };
-      setMessages((prev) => {
-        const filtered = prev.filter((m) => m.id !== loadingId);
-        return [...filtered, message];
-      });
-      setIsSending(false);
-      return;
-    }
     const finalize = (message: ChatMessage) => {
       setMessages((prev) => {
         const filtered = prev.filter((m) => m.id !== loadingId);

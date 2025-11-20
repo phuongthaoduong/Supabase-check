@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  envPrefix: ["VITE_", "SUPABASE_", "API_"],
   resolve: {
     dedupe: ["react", "react-dom"]
   },
