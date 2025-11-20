@@ -31,11 +31,19 @@ const initialMessages: ChatMessage[] = [
   }
 ];
 
+declare global {
+  interface Window {
+    __APP_ENV__?: Record<string, string>;
+  }
+}
+
+const runtime = typeof window !== "undefined" ? window.__APP_ENV__ : undefined;
+
 const resolveApiBase = () => {
   if (import.meta.env.DEV) {
     return "";
   }
-  return import.meta.env.VITE_API_URL || import.meta.env.API_URL || "";
+  return runtime?.API_URL || import.meta.env.VITE_API_URL || import.meta.env.API_URL || "";
 };
 
 const API_BASE = resolveApiBase();
